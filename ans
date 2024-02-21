@@ -1,0 +1,133 @@
+1.BFS of graph
+
+class Solution {
+    // Function to return Breadth First Traversal of given graph.
+    public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        
+        ArrayList<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new LinkedList<>();
+        
+        q.add(0);
+        boolean visit[] = new boolean[V];
+        visit[0] = true;
+        
+        while(!q.isEmpty()){
+            int n = q.poll();
+            ans.add(n);
+            
+            for(int i=0; i<adj.get(n).size(); i++){
+                int v = adj.get(n).get(i);
+                if(!visit[v]){
+                   visit[v] = true;
+                    q.add(v);
+                }
+            }
+            
+        }
+        return ans;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2.Print adjacency list
+
+class Solution {
+    public List<List<Integer>> printGraph(int V, int edges[][]) {
+        
+        List<List<Integer>> ans = new ArrayList<>();
+       
+       for(int i = 0;i<V;i++){
+           ans.add(new ArrayList<>());
+       }
+        
+        for(int i =0;i<edges.length;i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+            ans.get(u).add(v);
+            ans.get(v).add(u);
+        }
+        return ans;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3.Number of Provinces
+
+class Solution {
+    static void dfs(int i ,ArrayList<ArrayList<Integer>> adjList, boolean visited[] ){
+        visited[i]=true;
+        for(int v:adjList.get(i)){
+             if(!visited[v]){
+               
+               dfs(v,adjList,visited);
+            }
+        }
+    }
+    static int numProvinces(ArrayList<ArrayList<Integer>> adj, int V) {
+        ArrayList<ArrayList<Integer>> adjList = new ArrayList<ArrayList<Integer>>();
+        
+        boolean visited[] = new boolean[V];
+        int provinces = 0;
+        
+        for(int i =0;i<V; i++){
+            adjList.add(new ArrayList<>());
+        }
+        
+        for(int i=0;i<V;i++){
+            for(int j=0;j<V;j++){
+                if(adj.get(i).get(j)==1 && i!=j){
+                    adjList.get(i).add(j);
+                    adjList.get(j).add(i);
+                }
+            }
+        }
+        
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+               provinces++;
+               dfs(i,adjList,visited);
+            }
+        }
+        return provinces;
+    }
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.Count the Number of Complete Components
+
+class Solution {
+    static int e = 0, v=0;
+    public int countCompleteComponents(int n, int[][] edges) {
+
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) adj.add(new ArrayList<>());
+
+        for (int[] edge: edges) {
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+        }
+
+        boolean[] visited = new boolean[n];
+        int c = 0;
+
+         for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                dfs(visited, i, adj);
+                int nc2= v*(v-1) /2 ; // appidi pochuna 
+                if(nc2 *2==e)c++;
+            }
+            e=0;
+            v=0;
+        }
+        return c;
+
+    }
+       public static void dfs(boolean[] visited, int from, List<List<Integer>> adj) {
+        visited[from] = true;
+        v++;
+        for (int to : adj.get(from)) {
+            e++;
+            if (!visited[to]) {
+                dfs(visited, to, adj);
+            }
+        }
+    }
+}
